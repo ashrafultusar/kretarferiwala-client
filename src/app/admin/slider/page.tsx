@@ -47,7 +47,7 @@
 //     setIsLoading(true);
 
 //     try {
-//       const res = await fetch("http://localhost:5000/slider", {
+//       const res = await fetch("https://kretarferiwala-server.vercel.app/slider", {
 //         method: "POST",
 //         body: formData,
 //       });
@@ -70,7 +70,7 @@
 //   };
 
 //   const handleDelete = async (id: string) => {
-//     const res = await fetch(`http://localhost:5000/slider?id=${id}`, { method: "DELETE" });
+//     const res = await fetch(`https://kretarferiwala-server.vercel.app/slider?id=${id}`, { method: "DELETE" });
 //     if (res.ok) {
 //       setSliderImages(sliderImages.filter((img) => img._id !== id));
 //       toast.success("Deleted successfully");
@@ -178,7 +178,9 @@ const AdminSliderUpload: React.FC = () => {
 
   const fetchSliderImages = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/sliders`);
+      const res = await fetch(
+        `https://kretarferiwala-server.vercel.app/sliders`
+      );
       const data = await res.json();
       setSliderImages(data);
     } catch (error) {
@@ -204,10 +206,13 @@ const AdminSliderUpload: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/slider`, {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        `https://kretarferiwala-server.vercel.app/slider`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const data = await res.json();
 
       if (res.ok) {
@@ -228,7 +233,10 @@ const AdminSliderUpload: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/sliderDelete?id=${id}`, { method: "DELETE" });
+      const res = await fetch(
+        `https://kretarferiwala-server.vercel.app/sliderDelete?id=${id}`,
+        { method: "DELETE" }
+      );
       if (res.ok) {
         setSliderImages(sliderImages.filter((img) => img._id !== id));
         toast.success("Deleted successfully");

@@ -23,7 +23,9 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/categories");
+        const res = await fetch(
+          "https://kretarferiwala-server.vercel.app/categories"
+        );
         if (res.ok) {
           const data = await res.json();
           setCategories(data);
@@ -40,18 +42,21 @@ const CategoryPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!category.trim() || !categoryImage) return;
-  
+
     const formData = new FormData();
     formData.append("name", category);
     formData.append("image", categoryImage);
-  
+
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/category", {
-        method: "POST",
-        body: formData,
-      });
-  
+      const res = await fetch(
+        "https://kretarferiwala-server.vercel.app/category",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       if (res.ok) {
         const newCategory = await res.json();
         setCategories((prev) => [...prev, newCategory]);
@@ -70,7 +75,6 @@ const CategoryPage = () => {
       setIsLoading(false);
     }
   };
-  
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -82,10 +86,13 @@ const CategoryPage = () => {
 
   const handleDelete = async (id: string, index: number) => {
     try {
-      const res = await fetch(`http://localhost:5000/category/${id}`, {
-        method: "DELETE",
-      });
-  
+      const res = await fetch(
+        `https://kretarferiwala-server.vercel.app/category/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
       if (res.ok) {
         const updated = [...categories];
         updated.splice(index, 1);
@@ -100,7 +107,6 @@ const CategoryPage = () => {
       toast.error("Something went wrong");
     }
   };
-  
 
   return (
     <div>

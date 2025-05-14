@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useEffect, useState, useCallback } from "react";
 
 export type Product = {
@@ -20,7 +20,9 @@ const useProducts = () => {
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:5000/products`);
+      const res = await fetch(
+        `https://kretarferiwala-server.vercel.app/products`
+      );
       const data = await res.json();
       setProducts(data);
     } catch (error) {

@@ -36,7 +36,9 @@ const ProductDetails = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"description" | "return">("description");
+  const [activeTab, setActiveTab] = useState<"description" | "return">(
+    "description"
+  );
   const [deliveryCharge, setDeliveryCharge] = useState({
     insideDhaka: 0,
     outsideDhaka: 0,
@@ -44,11 +46,11 @@ const ProductDetails = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
-  
-// all products
+
+  // all products
   useEffect(() => {
     setLoading(true); // Add setLoading(true) here
-    fetch(`http://localhost:5000/productdetails/${id}`)
+    fetch(`https://kretarferiwala-server.vercel.app/productdetails/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
@@ -62,16 +64,17 @@ const ProductDetails = () => {
       });
   }, [id]);
 
-
   // related products fetch
   useEffect(() => {
     const fetchRelatedProducts = async () => {
       if (!product?.category) return; // Ensure that product category exists
-  
+
       try {
-        const res = await fetch(`http://localhost:5000/products?category=${product.category}`);
+        const res = await fetch(
+          `https://kretarferiwala-server.vercel.app/related-products?category=${product.category}`
+        );
         const data = await res.json();
-  
+
         // Filter out the current product from the list of related products
         const filtered = data.filter((p: Product) => p._id !== id); // Exclude the current product
         setRelatedProducts(filtered); // Update the related products state
@@ -80,10 +83,9 @@ const ProductDetails = () => {
         setRelatedProducts([]); // Handle error scenario by setting an empty array
       }
     };
-  
+
     if (product) fetchRelatedProducts();
   }, [product, id]); // Re-run when product or id changes
-  
 
   // Fetch delivery charge
   useEffect(() => {
@@ -207,19 +209,21 @@ const ProductDetails = () => {
         <div className="flex space-x-4 border-b">
           <button
             onClick={() => setActiveTab("description")}
-            className={`py-2 px-4 cursor-pointer ${activeTab === "description"
-              ? "border-b-2 border-green-600 text-green-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`py-2 px-4 cursor-pointer ${
+              activeTab === "description"
+                ? "border-b-2 border-green-600 text-green-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             Description
           </button>
           <button
             onClick={() => setActiveTab("return")}
-            className={`py-2 px-4 cursor-pointer ${activeTab === "return"
-              ? "border-b-2 border-green-600 text-green-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`py-2 px-4 cursor-pointer ${
+              activeTab === "return"
+                ? "border-b-2 border-green-600 text-green-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             Return Policy
           </button>
@@ -281,4 +285,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
-

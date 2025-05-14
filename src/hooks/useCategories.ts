@@ -14,7 +14,9 @@ const useCategories = () => {
   const fetchCategories = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/categories");
+      const res = await fetch(
+        "https://kretarferiwala-server.vercel.app/categories"
+      );
       const data = await res.json();
       setCategories(data);
     } catch (error) {

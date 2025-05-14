@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-toastify";
 
-
 // Define types for product and category
 interface Product {
   _id: string;
@@ -30,7 +29,9 @@ const AllCategoriesProducts = () => {
     const fetchAllProducts = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/products`);
+        const response = await fetch(
+          `https://kretarferiwala-server.vercel.app/products`
+        );
         const data = await response.json();
         setProducts(data);
         setFilteredProducts(data);
@@ -59,40 +60,46 @@ const AllCategoriesProducts = () => {
     }
   }, [categories]);
 
-//  delete products
-const handleDelete = async () => {
-  if (!productToDelete) return;
+  //  delete products
+  const handleDelete = async () => {
+    if (!productToDelete) return;
 
-  try {
-    const response = await fetch(`http://localhost:5000/product/${productToDelete}`, {
-      method: "DELETE",
-    });
+    try {
+      const response = await fetch(
+        `https://kretarferiwala-server.vercel.app/product/${productToDelete}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      // Remove the deleted product from both state arrays
-      const updatedProducts = products.filter(product => product._id !== productToDelete);
-      setProducts(updatedProducts);
+      if (response.ok) {
+        // Remove the deleted product from both state arrays
+        const updatedProducts = products.filter(
+          (product) => product._id !== productToDelete
+        );
+        setProducts(updatedProducts);
 
-      const updatedFiltered = filteredProducts.filter(product => product._id !== productToDelete);
-      setFilteredProducts(updatedFiltered);
+        const updatedFiltered = filteredProducts.filter(
+          (product) => product._id !== productToDelete
+        );
+        setFilteredProducts(updatedFiltered);
 
-      // Close modal and reset state
-      setIsModalOpen(false);
-      setProductToDelete(null);
+        // Close modal and reset state
+        setIsModalOpen(false);
+        setProductToDelete(null);
 
-      // Optional: Show toast or alert
-      toast.success("Product deleted successfully!");
-    } else {
-      toast.error(data.message || "Failed to delete the product");
+        // Optional: Show toast or alert
+        toast.success("Product deleted successfully!");
+      } else {
+        toast.error(data.message || "Failed to delete the product");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast.error("An error occurred while deleting the product");
     }
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    toast.error("An error occurred while deleting the product");
-  }
-};
-
+  };
 
   const openDeleteModal = (id: string) => {
     setProductToDelete(id);
@@ -115,7 +122,7 @@ const handleDelete = async () => {
   return (
     <div className="w-full px-4 md:px-8">
       <p className=" md:my-4 text-left text-lg md:text-2xl font-semibold">
-      Product Management
+        Product Management
       </p>
 
       {/* Tabs */}
@@ -157,11 +164,18 @@ const handleDelete = async () => {
 
               {/* Product Info */}
               <div className="flex flex-col flex-1">
-                <h3 className="text-lg font-semibold text-gray-800">{product?.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {product?.name}
+                </h3>
                 <p className=" font-bold">
-                  ${product?.discountPrice ? product?.discountPrice : product?.regularPrice}
+                  $
+                  {product?.discountPrice
+                    ? product?.discountPrice
+                    : product?.regularPrice}
                 </p>
-                <span className="text-gray-500 text-sm">{product?.category}</span>
+                <span className="text-gray-500 text-sm">
+                  {product?.category}
+                </span>
               </div>
 
               {/* Delete Button */}
@@ -181,7 +195,9 @@ const handleDelete = async () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-xs w-full">
-            <h3 className="text-lg font-semibold text-gray-800">Are you sure?</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              Are you sure?
+            </h3>
             <p className="text-gray-500 mb-4">This action cannot be undone.</p>
             <div className="flex justify-between">
               <button

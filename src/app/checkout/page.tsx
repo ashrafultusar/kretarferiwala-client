@@ -34,7 +34,6 @@ const CheckoutPage = () => {
     outsideDhaka: 150,
   });
 
-
   useEffect(() => {
     const fetchDeliveryCharge = async () => {
       try {
@@ -103,31 +102,36 @@ const CheckoutPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-  
+
     if (!formData.name || !formData.phone || !formData.address) {
       setError("সব ফিল্ড পূরণ করুন");
       return;
     }
-  
+
     try {
-      const res = await fetch("http://localhost:5000/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          products,
-          subTotal,
-          deliveryCharge,
-          totalAmount,
-        }),
-      });
-  
+      const res = await fetch(
+        "https://kretarferiwala-server.vercel.app/orders",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...formData,
+            products,
+            subTotal,
+            deliveryCharge,
+            totalAmount,
+          }),
+        }
+      );
+
       const data = await res.json();
-  
+
       if (res.ok) {
         setOrderedProductNames(products.map((product) => product.name));
         localStorage.removeItem("checkoutCart");
-        toast.success(`Order placed successfully! Order Number: ${data.orderNumber}`);
+        toast.success(
+          `Order placed successfully! Order Number: ${data.orderNumber}`
+        );
         setOrderSuccess(true);
       } else {
         setError(data.error || data.message || "অর্ডার পাঠাতে সমস্যা হয়েছে");

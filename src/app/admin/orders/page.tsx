@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link"; 
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const statusTabs = ["Active", "Shipped", "Delivered", "Cancelled"];
@@ -21,7 +21,9 @@ const Page = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:5000/allOrders");
+        const res = await fetch(
+          "https://kretarferiwala-server.vercel.app/allOrders"
+        );
         const data = await res.json();
         console.log("Fetched data:", data);
         setOrders(data);
@@ -34,13 +36,16 @@ const Page = () => {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/orders/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const res = await fetch(
+        `https://kretarferiwala-server.vercel.app/orders/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to update status");
 

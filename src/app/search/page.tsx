@@ -22,8 +22,8 @@
 //   useEffect(() => {
 //     const fetchProducts = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:5000/products?query=${encodeURIComponent(query)}`);
-        
+//         const res = await axios.get(`https://kretarferiwala-server.vercel.app/products?query=${encodeURIComponent(query)}`);
+
 //         setProducts(res.data);
 //       } catch (error) {
 //         console.error("Failed to fetch products:", error);
@@ -67,19 +67,17 @@
 //   );
 // }
 
-
-
 import React, { Suspense } from "react";
 import SearchPage from "./SearchPage";
 
-
 export default function SearchWrapper() {
   return (
-    <Suspense fallback={<div className="text-center py-10">Loading search results...</div>}>
+    <Suspense
+      fallback={
+        <div className="text-center py-10">Loading search results...</div>
+      }
+    >
       <SearchPage />
     </Suspense>
   );
 }
-
-
-

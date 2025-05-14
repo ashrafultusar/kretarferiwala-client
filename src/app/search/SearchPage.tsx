@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useSearchParams } from "next/navigation";
@@ -24,7 +23,9 @@ export default function SearchPage() {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/products?query=${encodeURIComponent(query)}`
+          `https://kretarferiwala-server.vercel.app/products?query=${encodeURIComponent(
+            query
+          )}`
         );
         setProducts(res.data);
       } catch (error) {

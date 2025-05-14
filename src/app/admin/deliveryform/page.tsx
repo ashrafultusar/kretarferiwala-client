@@ -9,7 +9,7 @@
 //   const handleSubmit = async (e: React.FormEvent) => {
 //     e.preventDefault();
 //     try {
-//       const res = await fetch('http://localhost:5000/deliverycharges', {
+//       const res = await fetch('https://kretarferiwala-server.vercel.app/deliverycharges', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -59,10 +59,9 @@
 
 // export default DeliveryChargeForm;
 
-
-'use client';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+"use client";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const DeliveryChargeForm = () => {
   const [insideDhaka, setInsideDhaka] = useState<number>(70);
@@ -71,22 +70,25 @@ const DeliveryChargeForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/deliverycharges', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ insideDhaka, outsideDhaka }),
-      });
+      const res = await fetch(
+        "https://kretarferiwala-server.vercel.app/deliverycharges",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ insideDhaka, outsideDhaka }),
+        }
+      );
 
       if (res.ok) {
-        toast.success('Delivery charges updated successfully!');
+        toast.success("Delivery charges updated successfully!");
       } else {
         const errorData = await res.json();
-        toast.error(errorData.message || 'Failed to update delivery charges');
+        toast.error(errorData.message || "Failed to update delivery charges");
       }
     } catch (err) {
-      console.error('Error: ',err);
+      console.error("Error: ", err);
     }
   };
 
