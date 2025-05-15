@@ -64,18 +64,23 @@ const AllCategoriesProducts = () => {
   const handleDelete = async () => {
     if (!productToDelete) return;
 
+    const token = localStorage.getItem("token");
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_API}/product/${productToDelete}`,
         {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       const data = await response.json();
 
       if (response.ok) {
-        // Remove the deleted product from both state arrays
         const updatedProducts = products.filter(
           (product) => product._id !== productToDelete
         );
@@ -85,12 +90,8 @@ const AllCategoriesProducts = () => {
           (product) => product._id !== productToDelete
         );
         setFilteredProducts(updatedFiltered);
-
-        // Close modal and reset state
         setIsModalOpen(false);
         setProductToDelete(null);
-
-        // Optional: Show toast or alert
         toast.success("Product deleted successfully!");
       } else {
         toast.error(data.message || "Failed to delete the product");

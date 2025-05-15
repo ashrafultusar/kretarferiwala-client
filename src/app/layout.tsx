@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "kretarferiwala",
   description: "kretarferiwala is an ecommerce site",
+  icons: {
+    icon: "/logo_icon/logo.png",
+  },
 };
 
 export default function RootLayout({
