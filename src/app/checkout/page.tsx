@@ -57,6 +57,8 @@ const CheckoutPage = () => {
     fetchDeliveryCharge();
   }, []);
 
+  console.log(deliveryCharge);
+
   useEffect(() => {
     const stored = localStorage.getItem("checkoutCart");
     if (stored) {
@@ -248,11 +250,11 @@ const CheckoutPage = () => {
                   name="delivery"
                   checked={deliveryCharge === deliveryOptions.insideDhaka}
                   onChange={() =>
-                    setDeliveryCharge(deliveryOptions.insideDhaka)
+                    setDeliveryCharge(deliveryOptions?.insideDhaka)
                   }
                   className="mr-2"
                 />
-                ঢাকার ভিতরে {deliveryOptions.insideDhaka} টাকা
+                ঢাকার ভিতরে {deliveryCharge} টাকা
               </label>
             </div>
           </div>

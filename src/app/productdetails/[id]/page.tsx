@@ -97,7 +97,7 @@ const ProductDetails = () => {
 
     fetchDeliveryCharge();
   }, []);
-
+console.log(deliveryCharge);
   // paigenation
   const totalPages = Math.ceil(relatedProducts.length / productsPerPage);
   const paginatedProducts = relatedProducts.slice(
