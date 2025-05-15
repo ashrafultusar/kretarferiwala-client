@@ -15,7 +15,7 @@ const useCategories = () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "https://kretarferiwala-server.vercel.app/categories"
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/categories`
       );
       const data = await res.json();
       setCategories(data);

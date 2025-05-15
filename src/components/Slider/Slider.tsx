@@ -40,7 +40,7 @@ const Slider: React.FC = () => {
     const fetchSliderImages = async () => {
       try {
         const res = await fetch(
-          "https://kretarferiwala-server.vercel.app/sliders"
+          "${process.env.NEXT_PUBLIC_BACKEND_API}/sliders"
         );
         const data = await res.json();
         setSliderImages(data);

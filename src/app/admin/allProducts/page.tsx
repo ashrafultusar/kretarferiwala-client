@@ -30,7 +30,7 @@ const AllCategoriesProducts = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://kretarferiwala-server.vercel.app/products`
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/products`
         );
         const data = await response.json();
         setProducts(data);
@@ -66,7 +66,7 @@ const AllCategoriesProducts = () => {
 
     try {
       const response = await fetch(
-        `https://kretarferiwala-server.vercel.app/product/${productToDelete}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/product/${productToDelete}`,
         {
           method: "DELETE",
         }

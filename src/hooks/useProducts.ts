@@ -21,7 +21,7 @@ const useProducts = () => {
     try {
       setLoading(true);
       const res = await fetch(
-        `https://kretarferiwala-server.vercel.app/products`
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/products`
       );
       const data = await res.json();
       setProducts(data);

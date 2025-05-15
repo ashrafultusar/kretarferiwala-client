@@ -35,7 +35,7 @@ export default function ProductForm() {
 
     try {
       const res = await fetch(
-        "https://kretarferiwala-server.vercel.app/products",
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/products`,
         {
           method: "POST",
           body: formData,

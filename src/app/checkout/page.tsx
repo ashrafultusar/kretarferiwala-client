@@ -37,7 +37,7 @@ const CheckoutPage = () => {
   useEffect(() => {
     const fetchDeliveryCharge = async () => {
       try {
-        const res = await fetch("/api/updatedeliverycharge");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/updatedeliverycharge`);
         const data = await res.json();
 
         if (data.success && data.data) {
@@ -109,20 +109,17 @@ const CheckoutPage = () => {
     }
 
     try {
-      const res = await fetch(
-        "https://kretarferiwala-server.vercel.app/orders",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...formData,
-            products,
-            subTotal,
-            deliveryCharge,
-            totalAmount,
-          }),
-        }
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          products,
+          subTotal,
+          deliveryCharge,
+          totalAmount,
+        }),
+      });
 
       const data = await res.json();
 

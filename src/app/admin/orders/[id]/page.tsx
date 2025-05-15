@@ -39,7 +39,7 @@ const OrderDetailsPage = () => {
     const fetchOrder = async () => {
       try {
         const res = await fetch(
-          `https://kretarferiwala-server.vercel.app/orders/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/orders/${id}`
         );
         if (!res.ok) {
           setError("Order not found");

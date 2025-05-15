@@ -23,9 +23,9 @@ export default function SearchPage() {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `https://kretarferiwala-server.vercel.app/products?query=${encodeURIComponent(
-            query
-          )}`
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_API
+          }/products?query=${encodeURIComponent(query)}`
         );
         setProducts(res.data);
       } catch (error) {

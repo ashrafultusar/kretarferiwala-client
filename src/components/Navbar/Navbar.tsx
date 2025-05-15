@@ -4,12 +4,11 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { IoMenuSharp } from "react-icons/io5";
 import { ImCross } from "react-icons/im";
-// import { FiShoppingCart } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useCategories from "@/hooks/useCategories";
-// import { Product } from "@/hooks/useProducts";
+
 
 export default function Navbar() {
   const { categories } = useCategories();
@@ -27,28 +26,7 @@ export default function Navbar() {
     }
   };
 
-  // const handleScroll = () => {
-  //   if (typeof window !== "undefined") {
-  //     const currentScrollY = window.scrollY;
-
-  //     if (currentScrollY > lastScrollY) {
-
-  //       setScrollDirection("down");
-  //     } else {
-
-  //       setScrollDirection("up");
-  //     }
-
-  //     setLastScrollY(currentScrollY <= 0 ? 0 : currentScrollY); // Prevent negative scroll
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [lastScrollY]);
+  
 
   const handleScroll = useCallback(() => {
     if (typeof window !== "undefined") {

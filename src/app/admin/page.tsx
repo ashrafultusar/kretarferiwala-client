@@ -32,7 +32,7 @@ const Page = () => {
     const fetchOrders = async () => {
       try {
         const res = await fetch(
-          "https://kretarferiwala-server.vercel.app/allOrders"
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/allOrders`
         );
         const data = await res.json();
         setOrders(data);
@@ -70,7 +70,7 @@ const Page = () => {
     .sort(([, a], [, b]) => b.quantity - a.quantity)
     .slice(0, 10);
 
-  // Filter only active orders (e.g. not Delivered or Cancelled)
+ 
   const activeOrders = orders
     .filter(
       (order) => order.status !== "Delivered" && order.status !== "Cancelled"

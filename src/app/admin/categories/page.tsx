@@ -24,7 +24,7 @@ const CategoryPage = () => {
     const fetchCategories = async () => {
       try {
         const res = await fetch(
-          "https://kretarferiwala-server.vercel.app/categories"
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/categories`
         );
         if (res.ok) {
           const data = await res.json();
@@ -50,7 +50,7 @@ const CategoryPage = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        "https://kretarferiwala-server.vercel.app/category",
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/category`,
         {
           method: "POST",
           body: formData,
@@ -87,7 +87,7 @@ const CategoryPage = () => {
   const handleDelete = async (id: string, index: number) => {
     try {
       const res = await fetch(
-        `https://kretarferiwala-server.vercel.app/category/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/category/${id}`,
         {
           method: "DELETE",
         }

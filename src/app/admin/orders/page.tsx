@@ -22,7 +22,7 @@ const Page = () => {
     const fetchOrders = async () => {
       try {
         const res = await fetch(
-          "https://kretarferiwala-server.vercel.app/allOrders"
+          `${process.env.NEXT_PUBLIC_BACKEND_API}/allOrders`
         );
         const data = await res.json();
         console.log("Fetched data:", data);
@@ -37,7 +37,7 @@ const Page = () => {
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
       const res = await fetch(
-        `https://kretarferiwala-server.vercel.app/orders/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/orders/${id}`,
         {
           method: "PATCH",
           headers: {
