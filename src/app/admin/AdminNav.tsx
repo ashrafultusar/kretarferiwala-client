@@ -14,9 +14,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
+import Router from "next/router";
 
 
-export default function AdminLayout({
+export default function AdminNav({
   children,
 }: {
   children: React.ReactNode;
@@ -25,6 +26,10 @@ export default function AdminLayout({
   const pathname = usePathname(); 
   const [showSidebar, setShowSidebar] = useState(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    Router.replace("/admin/login");
+  };
   
 
   const links = [
@@ -97,7 +102,7 @@ export default function AdminLayout({
           ))}
 
           <button
-            
+            onClick={handleLogout}
             className="mt-6 w-full py-2 bg-[#134e4a] hover:bg-red-700 text-white rounded text-center transition-all cursor-pointer"
           >
             Logout
