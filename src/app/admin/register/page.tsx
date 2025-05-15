@@ -1,9 +1,10 @@
+import AuthForm from '@/components/AuthForm/AuthForm';
 import React from 'react';
 
 const register = () => {
     return (
         <div>
-            register form
+           <AuthForm type="register" />
         </div>
     );
 };

@@ -49,7 +49,7 @@ const ProductDetails = () => {
 
   // all products
   useEffect(() => {
-    setLoading(true); // Add setLoading(true) here
+    setLoading(true);
     fetch(`https://kretarferiwala-server.vercel.app/productdetails/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -60,32 +60,32 @@ const ProductDetails = () => {
         setProduct(null);
       })
       .finally(() => {
-        setLoading(false); // Make sure setLoading(false) is called
+        setLoading(false);
       });
   }, [id]);
 
   
   useEffect(() => {
+    if (!product || !product.category || !product._id) return;
+  
     const fetchRelatedProducts = async () => {
-      if (!product?.category) return; 
-
       try {
         const res = await fetch(
-          `${process.env.BACKEND_API}/products?category=${product.category}`
+          `http://localhost:5000/related-products?category=${product.category}&excludeId=${product._id}`
         );
         const data = await res.json();
-
-        
-        const filtered = data.filter((p: Product) => p._id !== id); 
-        setRelatedProducts(filtered); 
+        setRelatedProducts(data);
       } catch (err) {
         console.error("Failed to load related products:", err);
-        setRelatedProducts([]);
       }
     };
+  
+    fetchRelatedProducts();
+  }, [product]);
+  
 
-    if (product) fetchRelatedProducts();
-  }, [product, id]); 
+
+
 
   useEffect(() => {
     const fetchDeliveryCharge = async () => {
