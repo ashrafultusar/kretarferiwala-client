@@ -235,7 +235,9 @@ const AdminSliderUpload: React.FC = () => {
     try {
       const res = await fetch(
         `https://kretarferiwala-server.vercel.app/sliderDelete?id=${id}`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+        }
       );
       if (res.ok) {
         setSliderImages(sliderImages.filter((img) => img._id !== id));

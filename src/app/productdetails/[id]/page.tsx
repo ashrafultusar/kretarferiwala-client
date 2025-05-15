@@ -64,30 +64,29 @@ const ProductDetails = () => {
       });
   }, [id]);
 
-  // related products fetch
+  
   useEffect(() => {
     const fetchRelatedProducts = async () => {
-      if (!product?.category) return; // Ensure that product category exists
+      if (!product?.category) return; 
 
       try {
         const res = await fetch(
-          `https://kretarferiwala-server.vercel.app/related-products?category=${product.category}`
+          `${process.env.BACKEND_API}/products?category=${product.category}`
         );
         const data = await res.json();
 
-        // Filter out the current product from the list of related products
-        const filtered = data.filter((p: Product) => p._id !== id); // Exclude the current product
-        setRelatedProducts(filtered); // Update the related products state
+        
+        const filtered = data.filter((p: Product) => p._id !== id); 
+        setRelatedProducts(filtered); 
       } catch (err) {
         console.error("Failed to load related products:", err);
-        setRelatedProducts([]); // Handle error scenario by setting an empty array
+        setRelatedProducts([]);
       }
     };
 
     if (product) fetchRelatedProducts();
-  }, [product, id]); // Re-run when product or id changes
+  }, [product, id]); 
 
-  // Fetch delivery charge
   useEffect(() => {
     const fetchDeliveryCharge = async () => {
       try {

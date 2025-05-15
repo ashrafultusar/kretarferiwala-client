@@ -63,6 +63,11 @@ export default function AdminLayout({
       label: "Delivery Charge",
       icon: HomeIcon,
     },
+    {
+      href: "/admin/register",
+      label: "Register",
+      icon: HomeIcon,
+    },
   ];
 
   return (
