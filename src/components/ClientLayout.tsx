@@ -44,7 +44,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             </li>
             <li>
               <a
-                href="https://m.me/ashrafultusar"
+                href="https://m.me/kretarferiwala"
                 target="_blank"
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-blue-600 hover:bg-blue-100 transition"
               >
