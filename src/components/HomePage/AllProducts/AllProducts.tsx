@@ -5,6 +5,7 @@ import TitleWithLine from "@/Shared/TitleWithLine/TitleWithLine";
 import ProductCard from "@/Shared/ProductCard/ProductCard";
 import useProducts from "@/hooks/useProducts";
 import Pagination from "@/components/Pagination/Pagination";
+import Loading from "@/Shared/LoadingSpinner/Loading";
 
 const PRODUCTS_PER_PAGE = 40;
 
@@ -12,8 +13,11 @@ const AllProducts = () => {
   const { products, loading } = useProducts();
   const [currentPage, setCurrentPage] = useState(1);
 
-  if (loading) return <p>Loading...</p>;
-
+  if (loading) {
+    return (
+      <Loading></Loading>
+    );
+  }
   const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const paginatedProducts = products.slice(

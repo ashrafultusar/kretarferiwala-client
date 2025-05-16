@@ -1,6 +1,7 @@
 "use client";
 
 import useProducts from "@/hooks/useProducts";
+import Loading from "@/Shared/LoadingSpinner/Loading";
 import ProductCard from "@/Shared/ProductCard/ProductCard";
 import { useParams } from "next/navigation";
 
@@ -9,7 +10,11 @@ export default function CategoryPage() {
   const category = params.category;
   const { products, loading } = useProducts();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <Loading></Loading>
+    );
+  }
   if (!category) {
     return (
       <div className="text-center text-red-500 p-10">Category not found!</div>

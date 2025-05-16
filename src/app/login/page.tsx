@@ -32,7 +32,7 @@ const Login = () => {
         <h2 className="text-xl font-semibold text-center">Admin Login</h2>
         <input ref={emailRef} type="email" placeholder="Email" className="border p-2 w-full rounded" />
         <input ref={passwordRef} type="password" placeholder="Password" className="border p-2 w-full rounded" />
-        <button type="submit" className="bg-blue-600 text-white w-full py-2 rounded">Login</button>
+        <button type="submit" className="bg-orange-400 hover:bg-orange-500 cursor-pointer text-white w-full py-2 rounded">Login</button>
       </form>
     </div>
   );

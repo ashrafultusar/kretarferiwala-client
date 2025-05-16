@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import TitleWithLine from "@/Shared/TitleWithLine/TitleWithLine";
 import useCategories from "@/hooks/useCategories";
+import Loading from "@/Shared/LoadingSpinner/Loading";
 
 const AllCategories: React.FC = () => {
   const prevRef = useRef<HTMLButtonElement>(null);
@@ -23,9 +24,7 @@ const AllCategories: React.FC = () => {
 
   if (!categories.length) {
     return (
-      <div className="text-center text-xl font-semibold">
-        Loading Categories...
-      </div>
+      <Loading></Loading>
     );
   }
 
@@ -64,13 +63,13 @@ const AllCategories: React.FC = () => {
               <Link
                 href={`/products-category/${encodeURIComponent(category.name)}`}
               >
-                <div className="flex flex-col border border-neutral-300 items-center justify-center bg-[#f7f9fc] rounded-xl p-6 shadow-sm hover:shadow-md transition-transform duration-300 hover:scale-105 ">
-                  <div className="w-full h-16 mb-4 relative">
+                <div className="flex flex-col border border-neutral-300 items-center justify-start bg-[#f7f9fc] rounded-xl p-6 shadow-sm hover:shadow-md transition-transform duration-300 hover:scale-105 w-full h-54">
+                  <div className="w-full h-full mb-4 relative">
                     <Image
                       src={category?.image}
                       alt={category?.name}
                       fill
-                      className="object-contain"
+                      className="object-cover rounded-md"
                     />
                   </div>
                   <h3

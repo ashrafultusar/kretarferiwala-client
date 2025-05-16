@@ -8,6 +8,7 @@ import Link from "next/link";
 import TitleWithLine from "@/Shared/TitleWithLine/TitleWithLine";
 import ProductCard from "@/Shared/ProductCard/ProductCard";
 import Pagination from "@/components/Pagination/Pagination";
+import Loading from "@/Shared/LoadingSpinner/Loading";
 
 interface Product {
   _id: string;
@@ -32,6 +33,7 @@ interface CartItem {
 const ProductDetails = () => {
   const params = useParams();
   const id = params?.id as string;
+  const [isOrdering, setIsOrdering] = useState(false);
 
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -107,9 +109,7 @@ console.log(deliveryCharge);
 
   if (loading) {
     return (
-      <div className="text-center py-10">
-        <span className="loading loading-bars loading-xl text-red-500"></span>
-      </div>
+     <Loading></Loading>
     );
   }
 
@@ -139,6 +139,7 @@ console.log(deliveryCharge);
           <Link
             href="/checkout"
             onClick={() => {
+              setIsOrdering(true);
               const newProduct = {
                 id,
                 name: product?.name,
@@ -166,10 +167,34 @@ console.log(deliveryCharge);
                 "checkoutCart",
                 JSON.stringify(existingCart)
               );
+              setIsOrdering(false);
             }}
             className="bg-orange-400 hover:bg-orange-500 text-white font-semibold py-2 md:py-3 px-6 rounded cursor-pointer text-center"
           >
-            অর্ডার করুন
+         {isOrdering ? (
+    <svg
+      className="animate-spin h-5 w-5 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v8H4z"
+      ></path>
+    </svg>
+  ) : (
+    "অর্ডার করুন"
+  )}
           </Link>
           <a
             href="https://wa.me/8801795072200"
@@ -269,7 +294,7 @@ console.log(deliveryCharge);
       {relatedProducts.length === 0 && (
         <div className="my-7">
           <TitleWithLine title="Related Products" />
-          <div className="text-center py-10">
+          <div className="text-center text-red-500 py-10">
             <p>No related products found</p>
           </div>
         </div>

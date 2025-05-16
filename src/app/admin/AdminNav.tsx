@@ -1,6 +1,7 @@
 "use client";
 
 import {  usePathname } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import {
   Menu,
@@ -10,11 +11,11 @@ import {
   Upload,
   ShoppingBag,
   Layers,
-  HomeIcon
+  HomeIcon,CarIcon,User2Icon
 } from "lucide-react";
 import Link from "next/link";
 import clsx from "clsx";
-import Router from "next/router";
+
 
 
 export default function AdminNav({
@@ -22,14 +23,15 @@ export default function AdminNav({
 }: {
   children: React.ReactNode;
 }) {
-  
+ 
   const pathname = usePathname(); 
   const [showSidebar, setShowSidebar] = useState(false);
-
+  const router = useRouter();
   const handleLogout = () => {
     localStorage.removeItem("token");
-    Router.replace("/admin/login");
+    router.replace("/admin");
   };
+  
   
 
   const links = [
@@ -65,14 +67,19 @@ export default function AdminNav({
     },
     {
       href: "/admin/deliveryform",
-      label: "Delivery Charge",
-      icon: HomeIcon,
+      label: "Delivery Charges",
+      icon: CarIcon,
     },
     {
       href: "/admin/register",
       label: "Register",
-      icon: HomeIcon,
+      icon: User2Icon,
     },
+    {
+      href: "/admin/allAdmin",
+      label: "All Admin",
+      icon: User2Icon,
+    }
   ];
 
   return (
