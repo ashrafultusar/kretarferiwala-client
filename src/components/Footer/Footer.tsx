@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React from "react";
 import {
   FaFacebookF,
@@ -19,7 +20,6 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-2">Outlet Location</h4>
             <div className="h-[2px] w-10 bg-white mb-4" />
             <p className="text-black leading-relaxed text-sm">
-          
               প্লট-৭, রোড-এ, ব্লক-ক, সেকশন-৬, মিরপুর
               <br />
               ঢাকা-১২১৬ <br />
@@ -95,22 +95,25 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-2">Like Us On Facebook</h4>
             <div className="h-[2px] w-10 bg-white mb-4" />
             <div className="w-full">
-              <iframe
-                src="/card/card2.jpg"
-                width="100%"
-                height="150"
-                style={{ border: "none", overflow: "hidden" }}
-                allowFullScreen
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                title="Facebook Page"
-              ></iframe>
+              <a
+                href="https://www.facebook.com/kretarferiwala?rdid=9pKYsrUAecA3JJHF&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18zL48K9C7%2F#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src="/logo_icon/logo.png"
+                  alt="Facebook Page"
+                  width={200}
+                  height={100}
+                />
+              </a>
             </div>
           </div>
         </div>
       </div>
       <div className="border-t text-center border-gray-700  py-4 text-black text-sm ">
         <p>
-          {" "}
+       
           &copy; 2025{" "}
           <span className="font-bold">
             <a>Kretarferiwala</a>

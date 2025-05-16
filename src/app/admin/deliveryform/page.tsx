@@ -1,5 +1,3 @@
-
-
 "use client";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -11,27 +9,32 @@ const DeliveryChargeForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("token"); 
+  
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API}/deliverycharges`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/updatedeliverycharge`,
         {
-          method: "POST",
+          method: "PATCH",  
           headers: {
             "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify({ insideDhaka, outsideDhaka }),
         }
       );
-
+  
       if (res.ok) {
         toast.success("Delivery charges updated successfully!");
       } else {
         const errorData = await res.json();
-        toast.error(errorData.message || "Failed to update delivery charges");
+        toast.error(errorData.error || "Failed to update delivery charges");
       }
     } catch (err) {
-      console.error("Error: ", err);
+      console.error("Error:", err);
+      toast.error("Something went wrong!");
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -55,7 +58,7 @@ const DeliveryChargeForm = () => {
       </div>
       <button
         type="submit"
-        className="bg-blue-500 text-white font-semibold py-3 rounded-md w-full"
+        className="bg-blue-500 cursor-pointer text-white font-semibold py-3 rounded-md w-full"
       >
         আপডেট করুন
       </button>

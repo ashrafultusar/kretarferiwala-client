@@ -28,7 +28,7 @@ interface CartItem {
   discountPrice: number;
   image: string;
   quantity: number;
-}
+} 
 
 const ProductDetails = () => {
   const params = useParams();

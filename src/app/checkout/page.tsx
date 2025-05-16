@@ -14,9 +14,15 @@ type Product = {
   quantity: number;
 };
 
+type DeliveryChargeData = {
+  insideDhaka: number;
+  outsideDhaka: number;
+};
+
 const CheckoutPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [deliveryCharge, setDeliveryCharge] = useState(150);
+  const [deliveryChargeData, setDeliveryChargeData] = useState<DeliveryChargeData | null>(null);
+  const [selectedDeliveryCharge, setSelectedDeliveryCharge] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -29,48 +35,44 @@ const CheckoutPage = () => {
   const [orderedProductNames, setOrderedProductNames] = useState<string[]>([]);
   const router = useRouter();
 
-  const [deliveryOptions, setDeliveryOptions] = useState({
-    insideDhaka: 70,
-    outsideDhaka: 150,
-  });
-
   useEffect(() => {
-    const fetchDeliveryCharge = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/updatedeliverycharge`);
-        const data = await res.json();
-
-        if (data.success && data.data) {
-          setDeliveryOptions({
-            insideDhaka: data.data.insideDhaka,
-            outsideDhaka: data.data.outsideDhaka,
-          });
-
-          // Default value set (if needed)
-          setDeliveryCharge(data.data.outsideDhaka);
-        }
-      } catch (err) {
-        console.error("Failed to fetch delivery charges", err);
-      }
-    };
-
-    fetchDeliveryCharge();
-  }, []);
-
-  console.log(deliveryCharge);
-
-  useEffect(() => {
+    // Load cart products from localStorage
     const stored = localStorage.getItem("checkoutCart");
     if (stored) {
       setProducts(JSON.parse(stored));
     }
-    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    // Fetch delivery charge data from backend
+    const fetchDeliveryCharge = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/updatedeliverycharge`);
+        if (!res.ok) throw new Error("Failed to fetch delivery charge");
+        const data: DeliveryChargeData = await res.json();
+        setDeliveryChargeData(data);
+        // By default set insideDhaka charge
+        setSelectedDeliveryCharge(data.insideDhaka);
+      } catch (error) {
+        console.error(error);
+        // fallback value if API fails
+        setDeliveryChargeData({ insideDhaka: 150, outsideDhaka: 200 });
+        setSelectedDeliveryCharge(150);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDeliveryCharge();
   }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDeliveryCharge(parseInt(e.target.value));
   };
 
   const handleIncrease = (id: string) => {
@@ -99,7 +101,7 @@ const CheckoutPage = () => {
     (sum, item) => sum + item.discountPrice * item.quantity,
     0
   );
-  const totalAmount = subTotal + deliveryCharge;
+  const totalAmount = subTotal + selectedDeliveryCharge;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,7 +120,7 @@ const CheckoutPage = () => {
           ...formData,
           products,
           subTotal,
-          deliveryCharge,
+          deliveryCharge: selectedDeliveryCharge,
           totalAmount,
         }),
       });
@@ -160,6 +162,14 @@ const CheckoutPage = () => {
         <h2 className="text-xl font-semibold text-red-500">
           আপনি কোনো প্রোডাক্ট নির্বাচন করেননি।
         </h2>
+      </div>
+    );
+  }
+
+  if (loading || !deliveryChargeData) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>লোড হচ্ছে...</p>
       </div>
     );
   }
@@ -232,29 +242,27 @@ const CheckoutPage = () => {
           <div>
             <h3 className="font-semibold mb-2">কুরিয়ার চার্জ</h3>
             <div className="space-y-2">
-              <label className="flex items-center bg-green-600 text-white p-2 rounded-md cursor-pointer">
+              <label className={`flex items-center p-2 rounded-md cursor-pointer ${selectedDeliveryCharge === deliveryChargeData.outsideDhaka ? "bg-green-600 text-white" : "bg-gray-300 text-black"}`}>
                 <input
                   type="radio"
                   name="delivery"
-                  checked={deliveryCharge === deliveryOptions.outsideDhaka}
-                  onChange={() =>
-                    setDeliveryCharge(deliveryOptions.outsideDhaka)
-                  }
+                  value={deliveryChargeData.outsideDhaka}
+                  checked={selectedDeliveryCharge === deliveryChargeData.outsideDhaka}
+                  onChange={handleDeliveryChange}
                   className="mr-2"
                 />
-                ঢাকার বাইরে {deliveryOptions.outsideDhaka} টাকা
+                ঢাকার বাইরে {deliveryChargeData.outsideDhaka} টাকা
               </label>
-              <label className="flex items-center bg-gray-300 text-black p-2 rounded-md cursor-pointer">
+              <label className={`flex items-center p-2 rounded-md cursor-pointer ${selectedDeliveryCharge === deliveryChargeData.insideDhaka ? "bg-green-600 text-white" : "bg-gray-300 text-black"}`}>
                 <input
                   type="radio"
                   name="delivery"
-                  checked={deliveryCharge === deliveryOptions.insideDhaka}
-                  onChange={() =>
-                    setDeliveryCharge(deliveryOptions?.insideDhaka)
-                  }
+                  value={deliveryChargeData.insideDhaka}
+                  checked={selectedDeliveryCharge === deliveryChargeData.insideDhaka}
+                  onChange={handleDeliveryChange}
                   className="mr-2"
                 />
-                ঢাকার ভিতরে {deliveryCharge} টাকা
+                ঢাকার ভিতরে {deliveryChargeData.insideDhaka} টাকা
               </label>
             </div>
           </div>
@@ -263,7 +271,7 @@ const CheckoutPage = () => {
 
           <button
             type="submit"
-            className="inline-block w-full text-center bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-md cursor-pointer"
+            className=" inline-block w-full text-center bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-md cursor-pointer"
           >
             অর্ডার কনফর্ম করুন
           </button>
@@ -271,85 +279,79 @@ const CheckoutPage = () => {
       </div>
 
       {/* Right Product Summary */}
-      {loading ? (
-        <div>
-          <p>লোড হচ্ছে...</p>
-        </div>
-      ) : (
-        <div className="bg-white w-full md:w-1/2 p-6 rounded-lg shadow-md overflow-x-auto">
-          <h2 className="text-lg font-semibold mb-4">Product</h2>
+      <div className="bg-white w-full md:w-1/2 p-6 rounded-lg shadow-md overflow-x-auto">
+        <h2 className="text-lg font-semibold mb-4">Product</h2>
 
-          <table className="w-full text-sm text-left">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="px-2 py-2">Product</th>
-                <th className="px-2 py-2">Price</th>
-                <th className="px-2 py-2">Quantity</th>
-                <th className="px-2 py-2">Total</th>
-                <th className="px-2 py-2">Action</th>
+        <table className="w-full text-sm text-left">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-2 py-2">Product</th>
+              <th className="px-2 py-2">Price</th>
+              <th className="px-2 py-2">Quantity</th>
+              <th className="px-2 py-2">Total</th>
+              <th className="px-2 py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id} className="border-b">
+                <td className="px-2 py-2 flex items-center gap-2">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={40}
+                    height={40}
+                    className="rounded"
+                  />
+                  <span>{product.name}</span>
+                </td>
+                <td className="px-2 py-2">{product.discountPrice}Tk</td>
+                <td className="px-2 py-2">
+                  <button
+                    onClick={() => handleDecrease(product.id)}
+                    className="bg-orange-400 cursor-pointer text-white px-2 rounded"
+                  >
+                    -
+                  </button>
+                  <span className="mx-2">{product.quantity}</span>
+                  <button
+                    onClick={() => handleIncrease(product.id)}
+                    className="cursor-pointer bg-green-400 text-white px-2 rounded"
+                  >
+                    +
+                  </button>
+                </td>
+                <td className="px-2 py-2">
+                  {product.discountPrice * product.quantity}Tk
+                </td>
+                <td className="px-2 py-2">
+                  <button
+                    onClick={() => handleRemove(product.id)}
+                    className="cursor-pointer text-red-500"
+                  >
+                    <MdDeleteForever size={20} />
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product.id} className="border-b">
-                  <td className="px-2 py-2 flex items-center gap-2">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={40}
-                      height={40}
-                      className="rounded"
-                    />
-                    <span>{product.name}</span>
-                  </td>
-                  <td className="px-2 py-2">{product.discountPrice}Tk</td>
-                  <td className="px-2 py-2">
-                    <button
-                      onClick={() => handleDecrease(product.id)}
-                      className="bg-orange-400 text-white px-2 rounded"
-                    >
-                      -
-                    </button>
-                    <span className="mx-2">{product.quantity}</span>
-                    <button
-                      onClick={() => handleIncrease(product.id)}
-                      className="bg-green-400 text-white px-2 rounded"
-                    >
-                      +
-                    </button>
-                  </td>
-                  <td className="px-2 py-2">
-                    {product.discountPrice * product.quantity}Tk
-                  </td>
-                  <td className="px-2 py-2">
-                    <button
-                      onClick={() => handleRemove(product.id)}
-                      className="text-red-500"
-                    >
-                      <MdDeleteForever size={20} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
 
-          <div className="text-right mt-4">
-            <div className="flex justify-between font-semibold">
-              <span>Subtotal</span>
-              <span>{subTotal.toLocaleString()} টাকা</span>
-            </div>
-            <div className="flex justify-between font-semibold">
-              <span>Delivery</span>
-              <span>{deliveryCharge.toLocaleString()} টাকা</span>
-            </div>
-            <div className="flex justify-between font-semibold text-xl text-green-500">
-              <span>Total</span>
-              <span>{totalAmount.toLocaleString()} টাকা</span>
-            </div>
+        <div className="text-right mt-4">
+          <div className="flex justify-between font-semibold">
+            <span>Subtotal</span>
+            <span>{subTotal.toLocaleString()} টাকা</span>
+          </div>
+          <div className="flex justify-between font-semibold">
+            <span>Delivery</span>
+            <span>{selectedDeliveryCharge.toLocaleString()} টাকা</span>
+          </div>
+          <div className="flex justify-between font-semibold text-xl text-green-500">
+            <span>Total</span>
+            <span>{totalAmount.toLocaleString()} টাকা</span>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Success Modal */}
       {orderSuccess && (
