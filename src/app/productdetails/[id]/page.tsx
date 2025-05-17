@@ -265,7 +265,7 @@ console.log(deliveryCharge);
       </div>
 
       {/* Related products */}
-      {relatedProducts.length > 0 && ( // এখানে চেক করা হচ্ছে
+      {relatedProducts.length > 0 && ( 
         <div className="my-7">
           <TitleWithLine title="Related Products" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

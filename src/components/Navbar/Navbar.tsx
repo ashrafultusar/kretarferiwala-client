@@ -72,7 +72,7 @@ export default function Navbar() {
                 width={40}
                 height={40}
               />
-              <span className="text-black font-bold text-lg">Shop</span>
+              
             </Link>
           </div>
 

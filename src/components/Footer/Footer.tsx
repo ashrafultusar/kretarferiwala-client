@@ -113,7 +113,6 @@ const Footer = () => {
       </div>
       <div className="border-t text-center border-gray-700  py-4 text-black text-sm ">
         <p>
-       
           &copy; 2025{" "}
           <span className="font-bold">
             <a>Kretarferiwala</a>

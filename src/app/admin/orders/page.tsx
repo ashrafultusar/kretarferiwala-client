@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-const statusTabs = ["Active", "Shipped", "Delivered", "Cancelled"];
+const statusTabs = ["active", "shipped", "delivered", "cancelled"];
 
 type Order = {
   _id: string;
@@ -16,7 +16,7 @@ type Order = {
 
 const Page = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [activeTab, setActiveTab] = useState("Active");
+  const [activeTab, setActiveTab] = useState("active");
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -25,7 +25,6 @@ const Page = () => {
           `${process.env.NEXT_PUBLIC_BACKEND_API}/allOrders`
         );
         const data = await res.json();
-        console.log("Fetched data:", data);
         setOrders(data);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
@@ -33,7 +32,7 @@ const Page = () => {
     };
     fetchOrders();
   }, []);
-
+  console.log(orders);
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
       const res = await fetch(
@@ -64,12 +63,7 @@ const Page = () => {
   };
 
   const filteredOrders = orders
-    .filter((order) => {
-      if (activeTab === "Active") {
-        return order.status === "Active" || order.status === "Shipped";
-      }
-      return order.status === activeTab;
-    })
+    .filter((order) => order.status.toLowerCase() === activeTab.toLowerCase())
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -89,7 +83,7 @@ const Page = () => {
             }`}
             onClick={() => setActiveTab(tab)}
           >
-            {tab}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>
@@ -97,7 +91,7 @@ const Page = () => {
       {/* Order Table */}
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <table className="min-w-full text-sm text-left">
-          <thead className="bg-gray-200 text-gray-700 uppercase">
+          <thead className="bg-gray-200 text-gray-700 uppercase ">
             <tr>
               <th className="px-6 py-3">Order No</th>
               <th className="px-6 py-3">Customer</th>
@@ -111,24 +105,24 @@ const Page = () => {
           <tbody>
             {filteredOrders.map((order) => (
               <tr key={order._id} className="border-b hover:bg-gray-50">
-                <td className="px-6 py-4">{order.orderNumber}</td>
-                <td className="px-6 py-4">{order.name}</td>
+                <td className="px-6 py-4">{order?.orderNumber}</td>
+                <td className="px-6 py-4">{order?.name}</td>
                 <td className="px-6 py-4">
                   {new Date(order.createdAt).toLocaleDateString()}
                 </td>
-                <td className="px-6 py-4">{order.paymentMethod}</td>
+                <td className="px-6 py-4">{order?.paymentMethod}</td>
                 <td className="px-6 py-4">
                   <select
                     value={order.status}
                     onChange={(e) =>
                       handleStatusChange(order._id, e.target.value)
                     }
-                    className={`px-2 py-1 rounded-full text-xs font-semibold border ${
-                      order.status === "Shipped"
+                    className={`px-2 py-1 rounded-full text-xs font-semibold border cursor-pointer ${
+                      order.status === "shipped"
                         ? "bg-blue-100 text-blue-700"
-                        : order.status === "Delivered"
+                        : order.status === "delivered"
                         ? "bg-green-100 text-green-700"
-                        : order.status === "Cancelled"
+                        : order.status === "cancelled"
                         ? "bg-red-100 text-red-700"
                         : "bg-yellow-100 text-yellow-700"
                     }`}
@@ -140,10 +134,10 @@ const Page = () => {
                     ))}
                   </select>
                 </td>
-                <td className="px-6 py-4">{order.totalAmount}৳</td>
+                <td className="px-6 py-4">{order?.totalAmount}৳</td>
                 <td className="px-6 py-4">
                   <Link
-                    href={`/admin/orders/${order._id}`}
+                    href={`/admin/orders/${order?._id}`}
                     className="text-blue-600 hover:underline cursor-pointer"
                   >
                     View
